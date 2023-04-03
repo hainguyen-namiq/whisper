@@ -232,11 +232,11 @@ def transcribe(
 
             # Lucid Whisper
             lucid_threshold = 0.3  # current working name for a threshold to determine permissible chunk length for a healthy transcript
-            if ((seek + N_FRAMES) / num_frames < 1.0) or (
+            if ((seek + N_FRAMES) / content_frames < 1.0) or (
                     seek == 0):  # first chunk, ergo no context or next chunk will be fully within num_frames ergo should be fine
                 decode_options["prompt"] = all_tokens[prompt_reset_since:]
             else:  # next chunk will not be fully within num_frames i.e. last chunk, calculate lucid_score
-                lucid_score = (num_frames - seek) / N_FRAMES
+                lucid_score = (content_frames - seek) / N_FRAMES
                 if lucid_score < lucid_threshold and "prompt" in decode_options:  # Lucid Score below threshold, erasing context!
                     decode_options["prompt"] = []
                 else:  # Lucid Score above threshold, keeping context!
