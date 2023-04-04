@@ -786,7 +786,7 @@ class DecodingTask:
                 if t == tokenizer.eot:
                     s.remove((p, t))
 
-        text_confidences: List = [[(p, tokenizer.decode(t)) for (p, t) in s] for s in tc]
+        text_confidences: List = [[(p, tokenizer.decode([t])) for (p, t) in s] for s in tc]
 
         sum_logprobs: List[float] = [lp[i] for i, lp in zip(selected, sum_logprobs)]
         avg_logprobs: List[float] = [
@@ -852,7 +852,6 @@ def decode(
         options = replace(options, **kwargs)
     result, tc = DecodingTask(model, options).run(mel)
 
-    result = DecodingTask(model, options).run(mel)
     if single:
         result = result[0]
         tc = tc[0]
